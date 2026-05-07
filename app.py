@@ -13,10 +13,10 @@ st.set_page_config(
 )
 
 # ── Brand colours ─────────────────────────────────────────────────────────────
-PRIMARY   = "#E07B2B"
-PRIMARY_D = "#C4621A"
+PRIMARY   = "#5D2F82"
+PRIMARY_D = "#37124A"
 DARK      = "#1E2D3D"
-SIDEBAR_BG = "#1E2D3D"
+SIDEBAR_BG = "#131820"
 
 STATUS_COLORS = {
     "Ny lead":            "#7F8C8D",
@@ -30,40 +30,130 @@ STATUS_COLORS = {
 
 st.markdown(f"""
 <style>
-    [data-testid="stSidebar"] {{
-        background-color: {SIDEBAR_BG} !important;
+    :root {{
+        --bg: #F7F8FB;
+        --surface: #FFFFFF;
+        --text: #1E2D3D;
+        --muted: #5D677A;
+        --border: #E6E9F2;
+        --primary: {PRIMARY};
+        --primary-dark: {PRIMARY_D};
     }}
-    [data-testid="stSidebar"] label,
-    [data-testid="stSidebar"] p,
-    [data-testid="stSidebar"] span,
-    [data-testid="stSidebar"] div {{
-        color: #CBD5E0 !important;
+
+    body {{ background: var(--bg); }}
+    .stApp {{ color: var(--text); }}
+    .stSidebar {{ background-color: {SIDEBAR_BG} !important; }}
+    .stSidebar [data-testid="stImage"] img {{ border-radius: 16px; }}
+
+    .page-hero {{
+        background: linear-gradient(180deg, rgba(82,32,106,0.08), rgba(255,255,255,0.95));
+        border-radius: 36px;
+        padding: 3rem 2rem;
+        margin-bottom: 2rem;
+        position: relative;
+        overflow: hidden;
     }}
-    .stButton > button[kind="primary"] {{
-        background-color: {PRIMARY} !important;
-        border-color: {PRIMARY} !important;
-        color: white !important;
+    .page-hero::before {{
+        content: "";
+        position: absolute;
+        right: -80px;
+        top: -60px;
+        width: 240px;
+        height: 240px;
+        background: rgba(82,32,106,0.16);
+        border-radius: 40px;
     }}
-    .stButton > button[kind="primary"]:hover {{
-        background-color: {PRIMARY_D} !important;
-        border-color: {PRIMARY_D} !important;
+    .page-hero::after {{
+        content: "";
+        position: absolute;
+        right: 40px;
+        bottom: -40px;
+        width: 160px;
+        height: 160px;
+        background: rgba(82,32,106,0.08);
+        border-radius: 32px;
     }}
+    .hero-eyebrow {{
+        text-transform: uppercase;
+        letter-spacing: 0.25rem;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }}
+    .hero-heading {{
+        font-size: clamp(2.6rem, 4vw, 3.8rem);
+        line-height: 1.02;
+        margin-bottom: 1rem;
+        color: var(--text);
+        font-weight: 800;
+    }}
+    .hero-copy {{
+        max-width: 680px;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        color: #4E596C;
+    }}
+
+    .section-card {{
+        background: var(--surface);
+        border-radius: 28px;
+        padding: 1.9rem;
+        box-shadow: 0 30px 60px rgba(17, 24, 39, 0.08);
+        border: 1px solid rgba(226, 232, 240, 0.7);
+        margin-bottom: 1.5rem;
+    }}
+    .metric-card {{
+        background: var(--surface);
+        border-radius: 24px;
+        padding: 1.35rem;
+        box-shadow: 0 18px 45px rgba(17, 24, 39, 0.06);
+        min-height: 120px;
+    }}
+    .page-login-card {{
+        background: var(--surface);
+        border-radius: 32px;
+        padding: 2.5rem 2rem;
+        box-shadow: 0 30px 80px rgba(17, 24, 39, 0.08);
+        max-width: 520px;
+        margin: 3rem auto 2rem;
+        border: 1px solid rgba(226, 232, 240, 0.8);
+    }}
+    .login-brand {{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }}
+    .login-brand h2 {{
+        margin: 0;
+        font-size: 1.45rem;
+        color: var(--text);
+        letter-spacing: 0.02em;
+    }}
+
+    .stButton > button {{ border-radius: 14px !important; padding: 0.92rem 1.1rem !important; }}
+    .stButton > button[kind="primary"] {{ background-color: var(--primary) !important; border-color: var(--primary) !important; color: white !important; }}
+    .stButton > button[kind="primary"]:hover {{ background-color: var(--primary-dark) !important; border-color: var(--primary-dark) !important; }}
+    .stButton > button:not([kind="primary"]) {{ border-radius: 14px !important; }}
+
     .badge {{
         display: inline-block;
-        padding: 3px 12px;
-        border-radius: 12px;
-        font-size: 12px;
+        padding: 0.4rem 1rem;
+        border-radius: 999px;
+        font-size: 0.82rem;
         font-weight: 700;
         color: white;
-        letter-spacing: 0.3px;
+        letter-spacing: 0.02em;
     }}
     .pipeline-step {{
         text-align: center;
-        padding: 7px 4px;
-        border-radius: 8px;
-        font-size: 11px;
+        padding: 0.75rem 0.6rem;
+        border-radius: 12px;
+        font-size: 0.9rem;
         font-weight: 700;
-        letter-spacing: 0.2px;
+        letter-spacing: 0.02em;
     }}
     .nav-btn > button {{
         background: transparent !important;
@@ -80,15 +170,15 @@ st.markdown(f"""
         color: white !important;
     }}
     .nav-btn-active > button {{
-        background: {PRIMARY} !important;
+        background: var(--primary) !important;
         color: white !important;
     }}
     .status-log-entry {{
         border-left: 3px solid #E0E0E0;
-        padding: 4px 10px;
-        margin: 4px 0;
-        font-size: 0.85rem;
-        color: #555;
+        padding: 1rem 1rem 1rem 1rem;
+        margin: 0.5rem 0;
+        font-size: 0.92rem;
+        color: #4E596C;
     }}
 </style>
 """, unsafe_allow_html=True)
@@ -141,8 +231,18 @@ db.create_tables()
 def page_login():
     _, mid, _ = st.columns([1, 1.2, 1])
     with mid:
-        st.image("logo.png", width=200)
-        st.markdown('<p style="text-align:center;color:#666;margin-bottom:2rem">Leadsystem</p>', unsafe_allow_html=True)
+        st.markdown(
+            """
+            <div class="page-login-card">
+                <div class="login-brand">
+                    <img src="logo.png" width="60" />
+                    <h2>FKS Leadsystem</h2>
+                </div>
+                <p style="color:#5D677A;text-align:center;margin-bottom:2rem">Logg inn for å få full oversikt over leads, familier og oppfølging.</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
         with st.form("login"):
             username = st.text_input("Brukernavn")
@@ -189,6 +289,24 @@ def sidebar():
                 st.markdown("</div>", unsafe_allow_html=True)
 
         st.divider()
+        with st.expander("🔑  Endre passord"):
+            with st.form("sidebar_change_pw"):
+                cur_pw  = st.text_input("Nåværende passord", type="password")
+                new_pw1 = st.text_input("Nytt passord", type="password")
+                new_pw2 = st.text_input("Bekreft nytt passord", type="password")
+                if st.form_submit_button("Oppdater passord", use_container_width=True):
+                    if not db.verify_user(user["username"], cur_pw):
+                        st.error("Feil nåværende passord.")
+                    elif not new_pw1:
+                        st.error("Nytt passord kan ikke være tomt.")
+                    elif new_pw1 != new_pw2:
+                        st.error("Passordene stemmer ikke overens.")
+                    elif len(new_pw1) < 6:
+                        st.error("Minst 6 tegn.")
+                    else:
+                        db.change_password(user["id"], new_pw1)
+                        st.success("Passord oppdatert.")
+
         if st.button("🚪  Logg ut", use_container_width=True):
             for k in list(st.session_state.keys()):
                 del st.session_state[k]
@@ -198,7 +316,16 @@ def sidebar():
 # ── DASHBOARD ─────────────────────────────────────────────────────────────────
 
 def page_dashboard():
-    st.title("Dashboard")
+    st.markdown(
+        """
+        <div class="page-hero">
+            <p class="hero-eyebrow">FKS Leadsystem</p>
+            <h1 class="hero-heading">Oversikt og kontroll for alle familier, barn og oppfølginger.</h1>
+            <p class="hero-copy">Få rask innsikt i pipeline, kommende oppfølginger og elevstatus i et moderne og tydelig kontrollpanel.</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
     stats         = db.get_stats()
     status_counts = db.get_status_counts()
@@ -921,7 +1048,7 @@ def page_admin():
     st.title("Administrasjon")
     user = st.session_state.user
 
-    admin_tab1, admin_tab2 = st.tabs(["👤 Brukere", "📥 Importer elever"])
+    admin_tab1, admin_tab2, admin_tab3 = st.tabs(["👤 Brukere", "📥 Importer elever", "🔑 Endre passord"])
 
     # ── Brukere ──────────────────────────────────────────────────────────────
     with admin_tab1:
@@ -1068,6 +1195,28 @@ Per Olsen    | 2014      | Familie Olsen    | Jon Olsen     | Far               
                         with st.expander(f"⚠️ {len(errors)} feil under import"):
                             for e in errors:
                                 st.caption(e)
+
+    # ── Endre passord ─────────────────────────────────────────────────────────
+    with admin_tab3:
+        st.subheader("Endre passord")
+        users = db.get_all_users()
+        user_options = {f"{u['full_name']} ({u['username']})": u["id"] for u in users}
+        selected_label = st.selectbox("Velg bruker", list(user_options.keys()))
+        selected_uid = user_options[selected_label]
+
+        with st.form("admin_change_pw"):
+            new_pw1 = st.text_input("Nytt passord", type="password")
+            new_pw2 = st.text_input("Bekreft nytt passord", type="password")
+            if st.form_submit_button("Lagre nytt passord", type="primary"):
+                if not new_pw1:
+                    st.error("Passord kan ikke være tomt.")
+                elif new_pw1 != new_pw2:
+                    st.error("Passordene stemmer ikke overens.")
+                elif len(new_pw1) < 6:
+                    st.error("Passordet må være minst 6 tegn.")
+                else:
+                    db.change_password(selected_uid, new_pw1)
+                    st.success(f"Passord oppdatert for {selected_label}.")
 
 
 # ── ROUTER ────────────────────────────────────────────────────────────────────
