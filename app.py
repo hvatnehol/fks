@@ -1077,6 +1077,31 @@ def page_admin():
                         if st.button(f"Gjør til {new_role}", key=f"rol_{u['id']}"):
                             db.update_user_role(u["id"], new_role)
                             st.rerun()
+                        if st.button("Tilbakestill passord", key=f"reset_pw_btn_{u['id']}"):
+                            st.session_state[f"show_reset_pw_{u['id']}"] = True
+
+                if st.session_state.get(f"show_reset_pw_{u['id']}"):
+                    with st.form(f"reset_pw_form_{u['id']}"):
+                        reset_pw1 = st.text_input("Nytt passord", type="password", key=f"reset_pw1_{u['id']}")
+                        reset_pw2 = st.text_input("Bekreft nytt passord", type="password", key=f"reset_pw2_{u['id']}")
+                        submit = st.form_submit_button("Lagre nytt passord", type="primary")
+                        cancel = st.form_submit_button("Avbryt")
+
+                        if cancel:
+                            del st.session_state[f"show_reset_pw_{u['id']}"]
+                            st.rerun()
+                        if submit:
+                            if not reset_pw1:
+                                st.error("Passord kan ikke være tomt.")
+                            elif reset_pw1 != reset_pw2:
+                                st.error("Passordene stemmer ikke overens.")
+                            elif len(reset_pw1) < 6:
+                                st.error("Passordet må være minst 6 tegn.")
+                            else:
+                                db.change_password(u["id"], reset_pw1)
+                                st.success(f"Passordet til {u['full_name']} er oppdatert.")
+                                del st.session_state[f"show_reset_pw_{u['id']}"]
+                                st.rerun()
 
         st.divider()
         st.subheader("Legg til ny bruker")
